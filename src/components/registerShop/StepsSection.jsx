@@ -2,6 +2,55 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 
 const SimpleStepsText = () => {
+  const registrationSteps = [
+    {
+      title: "Personal Details",
+      description: (
+        <>
+          <strong style={{ color: "rgba(33, 33, 33, 1)" }}>Aadhaar card</strong>{" "}
+          document required in this sction
+        </>
+      ),
+    },
+    {
+      title: "Business Details",
+      description: (
+        <>
+          <strong style={{ color: "rgba(33, 33, 33, 1)" }}>PAN Card</strong>,{" "}
+          <strong style={{ color: "rgba(33, 33, 33, 1)" }}>
+            shop registration document
+          </strong>
+          , and{" "}
+          <strong style={{ color: "rgba(33, 33, 33, 1)" }}>
+            shop owner authentication proof
+          </strong>{" "}
+          are required in this section.
+        </>
+      ),
+    },
+    {
+      title: "GST Details",
+      description: (
+        <>
+          <strong style={{ color: "rgba(33, 33, 33, 1)" }}>GST Document</strong>{" "}
+          or{" "}
+          <strong style={{ color: "rgba(33, 33, 33, 1)" }}>
+            Enrollments Number
+          </strong>{" "}
+          document required in this sction
+        </>
+      ),
+    },
+    {
+      title: "Bank Details",
+      description: "",
+    },
+    {
+      title: "Pickup Address",
+      description: "",
+    },
+  ];
+
   return (
     <Box
       sx={{
@@ -59,7 +108,7 @@ const SimpleStepsText = () => {
             alignItems: "flex-start",
             flexDirection: { xs: "column", md: "row" },
             position: "relative",
-            gap: "20px", // Add some gap between steps
+            gap: "20px",
             "@media (max-width: 600px)": {
               justifyContent: "center",
               alignItems: "center",
@@ -72,19 +121,19 @@ const SimpleStepsText = () => {
               position: "absolute",
               top: "24px",
               left: "50%",
-              width: "calc(90% - 80px)", // Reduced width for better layout
+              width: "calc(90% - 80px)",
               height: "1px",
               background: "#455F76",
               zIndex: 0,
               transform: "translateX(-50%)",
               "@media (max-width: 600px)": {
-                display: "none", // Hide the line on mobile
+                display: "none",
               },
             }}
           />
 
           {/* Step Details */}
-          {[...Array(5)].map((_, index) => (
+          {registrationSteps.map((step, index) => (
             <Box
               key={index}
               sx={{
@@ -130,7 +179,7 @@ const SimpleStepsText = () => {
                   },
                 }}
               >
-                Step Title {index + 1}
+                {step.title}
               </Typography>
 
               {/* Step Description */}
@@ -146,7 +195,7 @@ const SimpleStepsText = () => {
                   },
                 }}
               >
-                Description for step {index + 1}
+                {step.description}
               </Typography>
             </Box>
           ))}
