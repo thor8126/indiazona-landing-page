@@ -119,14 +119,17 @@ const SimpleStepsText = () => {
           <Box
             sx={{
               position: "absolute",
-              top: "24px",
-              left: "50%",
+              top: "20px",
+              left: "51%",
               width: "calc(90% - 80px)",
               height: "1px",
               background: "#455F76",
               zIndex: 0,
               transform: "translateX(-50%)",
               "@media (max-width: 600px)": {
+                display: "none",
+              },
+              "@media (max-width: 900px)": {
                 display: "none",
               },
             }}
