@@ -262,6 +262,24 @@ function Header({ aboutCampaignRef }) {
             </Typography>
             {/* Form Component */}
             <Form ref={formRef} />
+            <Button
+              onClick={() => formRef.current.submitForm()}
+              variant="contained"
+              fullWidth
+              sx={{
+                bgcolor: "#FF944E",
+                "&:hover": {
+                  bgcolor: "#e57f3d",
+                },
+                textTransform: "none",
+                py: 1.5,
+                fontSize: "16px",
+                mt: 2,
+                borderRadius: "4px",
+              }}
+            >
+              Get Started Now
+            </Button>
           </Box>
         </Grid>
       </Grid>

@@ -1,4 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
+import { Slide } from "@mui/material";
 import {
   TextField,
   MenuItem,
@@ -257,12 +258,39 @@ const Form = forwardRef((props, ref) => {
 
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        TransitionComponent={Slide}
+        sx={{
+          mt: { xs: 1, sm: 3 },
+          mr: { xs: 1, sm: 3 },
+          "& .MuiAlert-root": {
+            width: { xs: "90vw", sm: "320px" },
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            fontSize: { xs: "14px", sm: "15px" },
+            borderRadius: "8px",
+          },
+          "& .MuiAlert-filledSuccess": {
+            bgcolor: "#4caf50",
+            opacity: 0.9,
+          },
+          "& .MuiAlert-filledError": {
+            bgcolor: "#f44336",
+            opacity: 0.9,
+          },
+        }}
       >
         <Alert
           severity={snackbar.severity}
           onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))}
+          variant="filled"
+          sx={{
+            "& .MuiAlert-action": {
+              pt: 0,
+              alignItems: "center",
+            },
+          }}
         >
           {snackbar.message}
         </Alert>
