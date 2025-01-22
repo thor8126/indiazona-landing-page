@@ -6,7 +6,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import banner1 from "../../assets/Indiazona Banner 1.jpg";
 import banner2 from "../../assets/Aapki Dukaan, Aapki Pehchaan Banner_Option 2.jpg";
-// import { IN_ASSETS } from "../../BaseUrl";
 
 const RegisterBanner = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -45,7 +44,7 @@ const RegisterBanner = () => {
     <Box
       sx={{
         width: "100%",
-        maxWidth: "100%",
+        maxWidth: "100vw",
         overflowX: "hidden",
         mb: 10,
       }}
@@ -54,6 +53,7 @@ const RegisterBanner = () => {
         sx={{
           position: "relative",
           maxWidth: "100%",
+          width: "100%",
         }}
       >
         <Box
@@ -65,6 +65,9 @@ const RegisterBanner = () => {
               transition: "opacity 0.3s",
               opacity: loaded ? 1 : 0,
               maxWidth: "100%",
+              "@media (max-width: 490px)": {
+                width: "100%",
+              },
             },
           }}
         >
@@ -75,6 +78,9 @@ const RegisterBanner = () => {
                 cursor: currentSlide === 0 ? "pointer" : "default",
                 position: "relative",
                 maxWidth: "100%",
+                "@media (max-width: 490px)": {
+                  width: "100%",
+                },
               }}
             >
               <Box
@@ -82,8 +88,16 @@ const RegisterBanner = () => {
                 sx={{
                   width: "100%",
                   display: "block",
-                  objectFit: "cover",
-                  height: { xs: "200px", sm: "300px", md: "auto" },
+                  objectFit: "contain",
+                  height: {
+                    xs: "200px",
+                    sm: "300px",
+                    md: "auto",
+                  },
+                  "@media (max-width: 490px)": {
+                    height: "150px",
+                    objectFit: "cover",
+                  },
                 }}
                 alt="lady_image_hero_section"
                 src={banner1}
@@ -96,6 +110,9 @@ const RegisterBanner = () => {
                 position: "relative",
                 cursor: currentSlide === 1 ? "pointer" : "default",
                 maxWidth: "100%",
+                "@media (max-width: 490px)": {
+                  width: "100%",
+                },
               }}
               onClick={handleSecondImageClick}
             >
@@ -104,8 +121,16 @@ const RegisterBanner = () => {
                 sx={{
                   width: "100%",
                   display: "block",
-                  objectFit: "cover",
-                  height: { xs: "200px", sm: "300px", md: "auto" },
+                  objectFit: "contain",
+                  height: {
+                    xs: "200px",
+                    sm: "300px",
+                    md: "auto",
+                  },
+                  "@media (max-width: 490px)": {
+                    height: "150px",
+                    objectFit: "cover",
+                  },
                 }}
                 alt="second_banner_image"
                 src={banner2}
