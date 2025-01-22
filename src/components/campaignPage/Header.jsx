@@ -278,7 +278,7 @@ function Header({ aboutCampaignRef }) {
                 borderRadius: "4px",
               }}
             >
-              Get Started Now
+              Register
             </Button>
           </Box>
         </Grid>
