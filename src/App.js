@@ -15,6 +15,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<RegisterShopPage />} />
+      <Route path="/registerseller" element={<RegisterShopPage />} />
 
       <Route path="/campaign" element={<CampaignPage />} />
 
