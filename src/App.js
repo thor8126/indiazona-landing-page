@@ -16,23 +16,19 @@ function App() {
     <Routes>
       <Route path="/" element={<RegisterShopPage />} />
 
-      {/* For Registration api, check line 108 in the Form component in campaignPage folder */}
       <Route path="/campaign" element={<CampaignPage />} />
+
+      {/* New Components  */}
       <Route path="/about" element={<AboutUsPage />} />
       <Route path="/sellers-faqs" element={<VendorFAQs />} />
       <Route path="/customer-faqs" element={<CustomerFAQs />} />
       <Route path="/compliance" element={<ComplianceUndertaking />} />
       <Route path="/privacy" element={<PrivacyPolicyPage />} />
       <Route path="/terms" element={<TermsOfUsePage />} />
-      <Route
-        path="/policies/cancellation"
-        element={<OrderCancellationFAQs />}
-      />
-      <Route
-        path="/policies/return-exchange"
-        element={<ReturnExchangePolicy />}
-      />
-      {/*  */}
+      <Route path="/policies">
+        <Route path="cancellation" element={<OrderCancellationFAQs />} />
+        <Route path="return-exchange" element={<ReturnExchangePolicy />} />
+      </Route>
     </Routes>
   );
 }
