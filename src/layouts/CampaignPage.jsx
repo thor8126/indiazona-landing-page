@@ -7,7 +7,7 @@ import HowItWorks from "../components/campaignPage/HowItWorks";
 import FAQ from "../components/campaignPage/FAQ";
 import Header from "../components/campaignPage/Header";
 import HeaderSection from "../components/registerShop/HeaderSection";
-import Footer from "../components/commonComp/Footer";
+import Footer from "../components/HomePage/Footer";
 
 const CampaignPage = () => {
   const aboutCampaignRef = useRef();

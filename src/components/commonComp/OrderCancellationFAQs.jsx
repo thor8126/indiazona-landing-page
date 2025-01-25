@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
+import HeaderSection from "../registerShop/HeaderSection";
+import Footer from "../HomePage/Footer";
 const OrderCancellationFAQs = () => {
   const faqs = [
     {
@@ -63,71 +64,79 @@ const OrderCancellationFAQs = () => {
   ];
 
   return (
-    <Container sx={{ py: 4 }}>
-      <Paper
-        elevation={3}
-        sx={{
-          p: 4,
-          borderRadius: 3,
-          background: "linear-gradient(135deg, #f5f7fa 0%, #f3f4f6 100%)",
-        }}
-      >
-        <Box
+    <>
+      <HeaderSection />
+      <Container sx={{ py: 4 }}>
+        <Paper
+          elevation={3}
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 3,
+            p: 4,
+            borderRadius: 3,
+            background: "linear-gradient(135deg, #f5f7fa 0%, #f3f4f6 100%)",
           }}
         >
-          <CancelPresentationIcon
-            sx={{ fontSize: 40, color: "primary.main", mr: 2 }}
-          />
-          <Typography variant="h4" color="primary" fontWeight="bold">
-            Order Cancellation FAQs
-          </Typography>
-        </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: 3,
+            }}
+          >
+            <CancelPresentationIcon
+              sx={{ fontSize: 40, color: "primary.main", mr: 2 }}
+            />
+            <Typography variant="h4" color="primary" fontWeight="bold">
+              Order Cancellation FAQs
+            </Typography>
+          </Box>
 
-        <Divider sx={{ mb: 3, borderColor: "primary.main" }} />
+          <Divider sx={{ mb: 3, borderColor: "primary.main" }} />
 
-        <Box>
-          {faqs.map((faq, index) => (
-            <Accordion
-              key={index}
-              sx={{
-                mb: 2,
-                borderRadius: 2,
-                boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                "&:before": {
-                  display: "none",
-                },
-              }}
-              disableGutters
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+          <Box>
+            {faqs.map((faq, index) => (
+              <Accordion
+                key={index}
                 sx={{
-                  backgroundColor: "#f3f4f6",
+                  mb: 2,
                   borderRadius: 2,
-                  "&:hover": {
-                    backgroundColor: "#e5e7eb",
+                  boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                  "&:before": {
+                    display: "none",
                   },
                 }}
+                disableGutters
               >
-                <Typography variant="subtitle1" fontWeight="bold" color="black">
-                  {faq.question}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{ backgroundColor: "background.paper", borderRadius: 2 }}
-              >
-                <Typography variant="body2">{faq.answer}</Typography>
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </Box>
-      </Paper>
-    </Container>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  sx={{
+                    backgroundColor: "#f3f4f6",
+                    borderRadius: 2,
+                    "&:hover": {
+                      backgroundColor: "#e5e7eb",
+                    },
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    color="black"
+                  >
+                    {faq.question}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails
+                  sx={{ backgroundColor: "background.paper", borderRadius: 2 }}
+                >
+                  <Typography variant="body2">{faq.answer}</Typography>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </Box>
+        </Paper>
+      </Container>
+      <Footer />
+    </>
   );
 };
 

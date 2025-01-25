@@ -5,7 +5,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import QueryBuilderOutlinedIcon from "@mui/icons-material/QueryBuilderOutlined";
-// import morpankh from "../../assets/images/morpankh.png";
+//import morpankh from "../../assets/images/morpankh.png";
 let morpankh = "abc"; // Remove this line after adding the image
 
 const FOOTER_DATA = [
@@ -15,7 +15,7 @@ const FOOTER_DATA = [
     subTitle: [
       { name: "Homepage", path: "/" },
       { name: "About Us", path: "/about" },
-      { name: "Become a Seller", path: "/become-seller" },
+      { name: "Become a Seller", path: "/registerseller" },
     ],
   },
   {
@@ -49,6 +49,9 @@ const Footer = () => {
       // Add this ID to the array
       setActiveId((prevOpenIds) => [...prevOpenIds, id]);
     }
+  };
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
     <Box
@@ -207,6 +210,7 @@ const Footer = () => {
                   key={idx}
                   component={RouterLink}
                   to={sub.path}
+                  onClick={scrollToTop}
                   sx={{
                     fontWeight: "400",
                     fontSize: "12.55px",
@@ -251,7 +255,7 @@ const Footer = () => {
           }}
         >
           Copyright © 2024. Indiazona. All rights reserved. Brand owned by
-          Mahakali Infotek
+          Mahakali Infotek
         </Typography>
         <Box
           sx={{
@@ -262,6 +266,7 @@ const Footer = () => {
           <Typography
             component={RouterLink}
             to="/privacy"
+            onClick={scrollToTop}
             sx={{
               cursor: "pointer",
               fontSize: "12px",
@@ -280,6 +285,7 @@ const Footer = () => {
           <Typography
             component={RouterLink}
             to="/terms"
+            onClick={scrollToTop}
             sx={{
               fontSize: "12px",
               cursor: "pointer",

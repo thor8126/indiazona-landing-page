@@ -9,7 +9,7 @@ import SupportSection from "../components/registerShop/SupportSection";
 
 import { Stack } from "@mui/material";
 import RegisterBanner from "../components/registerShop/RegisterBanner";
-import Footer from "../components/commonComp/Footer";
+import Footer from "../components/HomePage/Footer";
 
 function RegisterShopPage() {
   return (

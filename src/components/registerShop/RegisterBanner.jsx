@@ -4,8 +4,6 @@ import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import banner1 from "../../assets/Indiazona Banner 1.jpg";
-import banner2 from "../../assets/Aapki Dukaan, Aapki Pehchaan Banner_Option 2.jpg";
 
 const RegisterBanner = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -100,7 +98,7 @@ const RegisterBanner = () => {
                   },
                 }}
                 alt="lady_image_hero_section"
-                src={banner1}
+                src="https://indiazona-assets.blr1.cdn.digitaloceanspaces.com/assets/images-prod/Indiazona%20Banner%201.jpg"
               />
             </Box>
 
@@ -133,7 +131,7 @@ const RegisterBanner = () => {
                   },
                 }}
                 alt="second_banner_image"
-                src={banner2}
+                src="https://indiazona-assets.blr1.cdn.digitaloceanspaces.com/assets/images-prod/Aapki%20Dukaan,%20Aapki%20Pehchaan%20Banner.jpg"
               />
             </Box>
           </Box>
