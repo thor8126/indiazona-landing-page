@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -9,8 +10,12 @@ import {
   TextField,
   Typography,
   Link,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+
+const BASE_URL = process.env.REACT_APP_API_URL || "{{IN_URL}}";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +24,11 @@ export default function LoginPage() {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +36,39 @@ export default function LoginPage() {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/auth/login`, {
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Store token in localStorage or context
+      localStorage.setItem("authToken", response.data.token);
+
+      setSnackbar({
+        open: true,
+        message: "Login successful!",
+        severity: "success",
+      });
+
+      // Redirect or navigate to dashboard
+      // Example: history.push('/dashboard');
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: error.response?.data?.message || "Login failed",
+        severity: "error",
+      });
+
+      // Clear password field on failure
+      setFormData((prev) => ({
+        ...prev,
+        password: "",
+      }));
+    }
   };
 
   const validateForm = () => {
@@ -48,11 +91,12 @@ export default function LoginPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", formData);
-      // Here you would typically send the data to your backend
-    } else {
-      console.log("Form has errors");
+      handleLogin();
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   const inputProps = {
@@ -361,6 +405,20 @@ export default function LoginPage() {
           </Box>
         </Grid>
       </Grid>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

@@ -9,8 +9,12 @@ import {
   TextField,
   Typography,
   Link,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import axios from "axios";
+const BASE_URL = process.env.REACT_APP_API_URL || "{{IN_URL}}";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,9 +29,15 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
+    phone: "",
   });
   const [isOtpVerified, setIsOtpVerified] = useState(false);
   const otpRefs = useRef([]);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   useEffect(() => {
     let interval;
@@ -70,31 +80,104 @@ export default function RegisterPage() {
     otpRefs.current[pastedData.length < 6 ? pastedData.length : 5]?.focus();
   };
 
+  const registerUser = async () => {
+    try {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        phone: mobileNumber.replace(/\s/g, "").replace(/^\+91/, ""),
+        password: formData.password,
+      };
+      const response = await axios.post(`${BASE_URL}/app/register`, payload);
+      setSnackbar({
+        open: true,
+        message: "Registration successful!",
+        severity: "success",
+      });
+      setShowOtpSection(true);
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: error.response?.data?.message || "Registration failed",
+        severity: "error",
+      });
+    }
+  };
+
   const handleSendOtp = () => {
     setShowOtpSection(true);
     setTimer(60);
     setIsOtpVerified(false);
-    // Here you would typically call an API to send the OTP
-    console.log("Sending OTP to", mobileNumber);
+    if (isValidMobileNumber(mobileNumber)) {
+      registerUser();
+    }
   };
 
-  const handleResendOtp = () => {
-    if (timer === 0) {
+  const resendOtp = async () => {
+    try {
+      const payload = {
+        email: formData.email,
+        phone: mobileNumber.replace(/\s/g, "").replace(/^\+91/, ""),
+      };
+      await axios.post(`${BASE_URL}/app/register/resend-otp`, payload);
       setTimer(60);
-      // Here you would typically call an API to resend the OTP
-      console.log("Resending OTP to", mobileNumber);
+      setSnackbar({
+        open: true,
+        message: "OTP resent successfully",
+        severity: "success",
+      });
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: error.response?.data?.message || "Failed to resend OTP",
+        severity: "error",
+      });
     }
   };
 
-  const handleVerifyOtp = () => {
-    // Only allow verification if all 6 OTP digits are filled
-    if (otp.every((digit) => digit.trim() !== "")) {
-      // Here you would typically call an API to verify the OTP
-      console.log("Verifying OTP:", otp.join(""));
+  const verifyOtp = async () => {
+    try {
+      const payload = {
+        email: formData.email,
+        otp: otp.join(""),
+      };
+      const response = await axios.post(
+        `${BASE_URL}/app/register/verify-otp`,
+        payload
+      );
       setIsOtpVerified(true);
+      setSnackbar({
+        open: true,
+        message: "OTP verified successfully",
+        severity: "success",
+      });
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "OTP verification failed";
+
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        otp: errorMessage,
+      }));
+
+      setSnackbar({
+        open: true,
+        message: errorMessage,
+        severity: "error",
+      });
+
+      setIsOtpVerified(false);
     }
   };
-
+  // const verifyOtp = async () => {
+  //   // Simulate successful OTP verification for testing
+  //   setIsOtpVerified(true);
+  //   setSnackbar({
+  //     open: true,
+  //     message: "OTP verified successfully",
+  //     severity: "success",
+  //   });
+  // };
   const isValidMobileNumber = (number) => {
     return /^\+91 [6-9]\d{9}$/.test(number);
   };
@@ -137,8 +220,13 @@ export default function RegisterPage() {
 
     if (!formData.password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    } else if (
+      !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])/.test(formData.password)
+    ) {
+      newErrors.password =
+        "Password must include uppercase, lowercase, number, and special character";
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -156,11 +244,24 @@ export default function RegisterPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", { ...formData, mobileNumber });
-      // Here you would typically send the data to your backend
-    } else {
-      console.log("Form has errors");
+      registerUser();
     }
+  };
+
+  const handleVerifyOtp = () => {
+    if (otp.every((digit) => digit.trim() !== "")) {
+      verifyOtp();
+    }
+  };
+
+  const handleResendOtp = () => {
+    if (timer === 0) {
+      resendOtp();
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   const inputProps = {
@@ -545,6 +646,20 @@ export default function RegisterPage() {
           </Box>
         </Grid>
       </Grid>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
