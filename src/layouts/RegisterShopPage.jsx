@@ -9,6 +9,7 @@ import SupportSection from "../components/registerShop/SupportSection";
 
 import { Stack } from "@mui/material";
 import RegisterBanner from "../components/registerShop/RegisterBanner";
+import Footer from "../components/commonComp/Footer";
 
 function RegisterShopPage() {
   return (
@@ -29,6 +30,7 @@ function RegisterShopPage() {
       <CategoriesSection />
       <VideoSection />
       <SupportSection />
+      <Footer />
     </Stack>
   );
 }
