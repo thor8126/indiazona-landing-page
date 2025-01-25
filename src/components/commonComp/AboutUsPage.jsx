@@ -23,7 +23,7 @@ const AboutUsPage = () => {
         >
           <StorefrontIcon sx={{ fontSize: 40, color: "primary.main", mr: 2 }} />
           <Typography variant="h4" color="primary" fontWeight="bold">
-            About IndiaZona
+            About Indiazona
           </Typography>
         </Box>
 
