@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -12,103 +12,13 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-export default function RegisterPage() {
+export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [timer, setTimer] = useState(60);
-  const [showOtpSection, setShowOtpSection] = useState(false);
-  const [mobileNumber, setMobileNumber] = useState("+91 ");
-  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
-  const [isOtpVerified, setIsOtpVerified] = useState(false);
-  const otpRefs = useRef([]);
-
-  useEffect(() => {
-    let interval;
-    if (timer > 0 && showOtpSection) {
-      interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [timer, showOtpSection]);
-
-  const handleOtpChange = (index, value) => {
-    if (value.length <= 1 && /^[0-9]*$/.test(value)) {
-      const newOtp = [...otp];
-      newOtp[index] = value;
-      setOtp(newOtp);
-
-      if (value && index < 5) {
-        otpRefs.current[index + 1]?.focus();
-      }
-    }
-  };
-
-  const handleOtpKeyDown = (index, e) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      otpRefs.current[index - 1]?.focus();
-    }
-  };
-
-  const handleOtpPaste = (e) => {
-    e.preventDefault();
-    const pastedData = e.clipboardData.getData("text").slice(0, 6).split("");
-    const newOtp = [...otp];
-    pastedData.forEach((digit, index) => {
-      if (index < 6 && /^[0-9]$/.test(digit)) {
-        newOtp[index] = digit;
-      }
-    });
-    setOtp(newOtp);
-    otpRefs.current[pastedData.length < 6 ? pastedData.length : 5]?.focus();
-  };
-
-  const handleSendOtp = () => {
-    setShowOtpSection(true);
-    setTimer(60);
-    setIsOtpVerified(false);
-    // Here you would typically call an API to send the OTP
-    console.log("Sending OTP to", mobileNumber);
-  };
-
-  const handleResendOtp = () => {
-    if (timer === 0) {
-      setTimer(60);
-      // Here you would typically call an API to resend the OTP
-      console.log("Resending OTP to", mobileNumber);
-    }
-  };
-
-  const handleVerifyOtp = () => {
-    // Only allow verification if all 6 OTP digits are filled
-    if (otp.every((digit) => digit.trim() !== "")) {
-      // Here you would typically call an API to verify the OTP
-      console.log("Verifying OTP:", otp.join(""));
-      setIsOtpVerified(true);
-    }
-  };
-
-  const isValidMobileNumber = (number) => {
-    return /^\+91 [6-9]\d{9}$/.test(number);
-  };
-
-  const handleMobileNumberChange = (e) => {
-    const value = e.target.value;
-    if (value.startsWith("+91 ")) {
-      setMobileNumber(value);
-    } else if (value.startsWith("+91")) {
-      setMobileNumber("+91 " + value.slice(3));
-    } else {
-      setMobileNumber("+91 " + value);
-    }
-  };
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -121,32 +31,14 @@ export default function RegisterPage() {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    }
-
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email is invalid";
     }
 
-    if (!isValidMobileNumber(mobileNumber)) {
-      newErrors.mobileNumber = "Invalid mobile number";
-    }
-
     if (!formData.password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    if (!isOtpVerified) {
-      newErrors.otp = "OTP must be verified";
     }
 
     setErrors(newErrors);
@@ -156,7 +48,7 @@ export default function RegisterPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", { ...formData, mobileNumber });
+      console.log("Form submitted:", formData);
       // Here you would typically send the data to your backend
     } else {
       console.log("Form has errors");
@@ -209,21 +101,21 @@ export default function RegisterPage() {
         <Grid
           item
           xs={12}
-          md={6}
+          md={5}
           sx={{
             height: "100%",
             overflowY: "auto",
             "&::-webkit-scrollbar": { display: "none" },
+            position: "relative",
           }}
         >
           <Box sx={{ maxWidth: 450, mx: "auto", paddingX: 2, paddingY: 1 }}>
             <Box
               sx={{
-                mb: 1,
+                mb: 4,
                 display: "flex",
-                alignItems: "baseline",
+                alignItems: "center",
                 justifyContent: "center",
-                gap: 1,
               }}
             >
               <svg
@@ -293,16 +185,27 @@ export default function RegisterPage() {
             </Box>
 
             <Typography
-              variant="h6"
+              variant="h4"
               sx={{
-                mb: 2,
+                mb: 1,
                 color: "#FF944E",
                 textAlign: "center",
                 fontWeight: "600",
-                fontSize: { xs: "1rem", md: "1.5rem" },
+                fontSize: { xs: "1.5rem", md: "2rem" },
               }}
             >
-              Create Account
+              Welcome
+            </Typography>
+
+            <Typography
+              variant="body1"
+              sx={{
+                mb: 4,
+                textAlign: "center",
+                color: "#455F76",
+              }}
+            >
+              Login with Email
             </Typography>
 
             <Box
@@ -314,22 +217,8 @@ export default function RegisterPage() {
               <TextField
                 required
                 fullWidth
-                name="name"
-                label="Name"
-                value={formData.name}
-                onChange={handleInputChange}
-                error={!!errors.name}
-                helperText={errors.name}
-                placeholder="Please write your name here"
-                InputLabelProps={inputLabelProps}
-                InputProps={inputProps}
-              />
-
-              <TextField
-                required
-                fullWidth
                 name="email"
-                label="Email"
+                label="Email Id"
                 type="email"
                 value={formData.email}
                 onChange={handleInputChange}
@@ -337,139 +226,68 @@ export default function RegisterPage() {
                 helperText={errors.email}
                 placeholder="abc@example.com"
                 InputLabelProps={inputLabelProps}
-                InputProps={inputProps}
-              />
-
-              <TextField
-                required
-                fullWidth
-                label="Mobile Number"
-                value={mobileNumber}
-                onChange={handleMobileNumberChange}
-                error={!!errors.mobileNumber}
-                helperText={errors.mobileNumber}
-                InputLabelProps={inputLabelProps}
                 InputProps={{
                   ...inputProps,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Button
-                        disabled={
-                          !isValidMobileNumber(mobileNumber) || showOtpSection
-                        }
-                        onClick={handleSendOtp}
-                        sx={{
-                          color: "#FF944E",
-                          "&.Mui-disabled": {
-                            color: "rgba(0, 0, 0, 0.26)",
-                          },
-                        }}
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
                       >
-                        Send OTP
-                      </Button>
+                        <path
+                          d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C19.5304 19 20.0391 18.7893 20.4142 18.4142C20.7893 18.0391 21 17.5304 21 17V7C21 6.46957 20.7893 5.96086 20.4142 5.58579C20.0391 5.21071 19.5304 5 19 5H5C4.46957 5 3.96086 5.21071 3.58579 5.58579C3.21071 5.96086 3 6.46957 3 7V17C3 17.5304 3.21071 18.0391 3.58579 18.4142C3.96086 18.7893 4.46957 19 5 19Z"
+                          stroke="#000000"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
                     </InputAdornment>
                   ),
                 }}
               />
-
-              {showOtpSection && (
-                <Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      gap: 1,
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{ mb: 1, color: "#455F76" }}
-                    >
-                      Enter OTP sent to your mobile number
-                    </Typography>
-                    <Button
-                      onClick={handleVerifyOtp}
-                      disabled={
-                        isOtpVerified ||
-                        otp.some((digit) => digit.trim() === "")
-                      }
-                      sx={{
-                        color: "#455F76",
-                        "&:hover": {
-                          borderColor: "#FF944E",
-                          backgroundColor: "rgba(255, 148, 78, 0.04)",
-                        },
-                        "&.Mui-disabled": {
-                          borderColor: "rgba(0, 0, 0, 0.26)",
-                          color: "rgba(0, 0, 0, 0.26)",
-                        },
-                      }}
-                    >
-                      {isOtpVerified ? "Verified" : "Verify OTP"}
-                    </Button>
-                  </Box>
-
-                  <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
-                    {otp.map((digit, index) => (
-                      <TextField
-                        key={index}
-                        inputRef={(el) => (otpRefs.current[index] = el)}
-                        value={digit}
-                        onChange={(e) => handleOtpChange(index, e.target.value)}
-                        onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                        onPaste={handleOtpPaste}
-                        sx={{
-                          width: "40px",
-                          "& input": { textAlign: "center", p: 1 },
-                        }}
-                        inputProps={{
-                          maxLength: 1,
-                          inputMode: "numeric",
-                          pattern: "[0-9]*",
-                        }}
-                        InputLabelProps={inputLabelProps}
-                        InputProps={inputProps}
-                      />
-                    ))}
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Button
-                      onClick={handleResendOtp}
-                      disabled={timer > 0}
-                      sx={{
-                        color: "black",
-                        "&.Mui-disabled": {
-                          color: "rgba(0, 0, 0, 0.26)",
-                        },
-                      }}
-                    >
-                      {timer > 0 ? `Resend OTP in ${timer}s` : "Resend OTP"}
-                    </Button>
-                  </Box>
-                </Box>
-              )}
 
               <TextField
                 required
                 fullWidth
                 name="password"
                 type={showPassword ? "text" : "password"}
-                label="Create Password"
+                label="Password"
                 value={formData.password}
                 onChange={handleInputChange}
                 error={!!errors.password}
                 helperText={errors.password}
+                placeholder="••••••••••••••"
                 InputLabelProps={inputLabelProps}
                 InputProps={{
                   ...inputProps,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z"
+                          stroke="#000000"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11"
+                          stroke="#000000"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </InputAdornment>
+                  ),
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
@@ -483,64 +301,62 @@ export default function RegisterPage() {
                 }}
               />
 
-              <TextField
-                required
-                fullWidth
-                name="confirmPassword"
-                type={showConfirmPassword ? "text" : "password"}
-                label="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                error={!!errors.confirmPassword}
-                helperText={errors.confirmPassword}
-                InputLabelProps={inputLabelProps}
-                InputProps={{
-                  ...inputProps,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        edge="end"
-                      >
-                        {showConfirmPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
+              <Box sx={{ textAlign: "right" }}>
+                <Link
+                  href="/forgot-password"
+                  sx={{
+                    color: "#455F76",
+                    textDecoration: "underline",
+                    "&:hover": { textDecoration: "none" },
+                  }}
+                >
+                  Forgot your password?
+                </Link>
+              </Box>
 
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                disabled={!isOtpVerified}
                 sx={{
                   mt: 1,
                   bgcolor: "#FF944E",
                   "&:hover": { bgcolor: "#ff8534" },
-                  "&.Mui-disabled": {
-                    bgcolor: "rgba(255, 148, 78, 0.5)",
-                    color: "#fff",
-                  },
                 }}
               >
-                CREATE ACCOUNT
+                LOGIN
               </Button>
 
               <Box sx={{ textAlign: "center" }}>
                 <Typography variant="body2">
-                  Already have an account?{" "}
-                  <Link href="/login" sx={{ color: "#FF944E" }}>
-                    Login
+                  Don't have an account?{" "}
+                  <Link href="/register" sx={{ color: "#FF944E" }}>
+                    Register Now
                   </Link>
                 </Typography>
               </Box>
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                width: "100%",
+                height: "200px",
+                display: { xs: "none", md: "block" },
+                zIndex: -1,
+              }}
+            >
+              <img
+                src="https://indiazona-assets.blr1.cdn.digitaloceanspaces.com/assets/images-prod/monumentals.png"
+                alt="Monuments"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  objectPosition: "bottom right",
+                }}
+              />
             </Box>
           </Box>
         </Grid>

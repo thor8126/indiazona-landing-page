@@ -11,14 +11,14 @@ import ComplianceUndertaking from "./components/commonComp/ComplianceUndertaking
 import PrivacyPolicyPage from "./components/commonComp/PrivacyPolicyPage";
 import TermsOfUsePage from "./components/commonComp/TermOfUsage";
 import RegisterPage from "./components/authPage/RegisterPage";
-import Login from "./components/authPage/Login";
+import LoginPage from "./components/authPage/LoginPage";
 
 function App() {
   return (
     <Routes>
       <Route index element={<Navigate to="/register" />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<LoginPage />} />
 
       <Route path="/" element={<RegisterShopPage />} />
       <Route path="/registerseller" element={<RegisterShopPage />} />
